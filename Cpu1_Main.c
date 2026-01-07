@@ -8,10 +8,10 @@ extern IfxCpu_syncEvent cpuSyncEvent;
 
 #if !defined(IFX_CFG_RETURN_FROM_MAIN)
 void core1_main (void)
-{
 #else
-	int core1_main (void)
+int core1_main (void)
 #endif
+{
     IfxCpu_enableInterrupts();
     /*
      * !!WATCHDOG1 IS DISABLED HERE!!

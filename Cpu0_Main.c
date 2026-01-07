@@ -9,10 +9,10 @@ IfxCpu_syncEvent cpuSyncEvent = 0;
 
 #if !defined(IFX_CFG_RETURN_FROM_MAIN)
 void core0_main(void)
-{
 #else
 int core0_main(void)
 #endif
+{
     uint8 message[] = "Hello World\n";
     Ifx_SizeT msg_size = 0;
 
@@ -37,6 +37,6 @@ int core0_main(void)
         uart_sendMessage(&message[0], msg_size); /* send entire message */
     }
 #else
-return 0;
+    return 0;
 #endif
 }
