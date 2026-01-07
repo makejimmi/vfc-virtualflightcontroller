@@ -58,6 +58,7 @@ dkms.conf
 
 # Build artifacts directories
 Debug/
+TriCore*/
 Release/
 
 # ADS Library Management temporary files
