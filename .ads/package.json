@@ -1,0 +1,12 @@
+{
+	"group"					: "project-initializer",
+	"name"					: "tricore-tc2xx",
+	"releaseTimestamp"		: 1748957181,
+	"version"				: 11,
+	"versionName"			: "1.10",
+	"versionCompatibility"	: [],
+	"info"					: {
+		"illd_version"		: "1.0.1.20.0",
+		"release_reason"	: "Update iLLDs to version 1.0.1.20.0"
+	}
+}
