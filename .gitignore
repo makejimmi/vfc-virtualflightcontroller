@@ -53,3 +53,30 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+# AURIX Development Studio / Eclipse
+
+# Build artifacts directories
+Debug/
+Release/
+
+# ADS Library Management temporary files
+# keep .ads/package.json as it defines dependencies
+.ads/backup-libraries.json
+.ads/clean-libraries.json
+.ads/install-libraries.json
+.ads/rollback-libraries.json
+
+# ADS Debugger Workspace (WinIDEA)
+.ads/winIDEAWorkspaces/
+
+# Eclipse project files (optional)
+# .settings/
+# .cproject
+# .project
+
+# Local history
+.History/
+
+# Other files to ignore
+.vscode/
