@@ -67,6 +67,9 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/Libraries/iLLD/TC27D/Tricore/_Lib/DataHandling}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/Libraries/iLLD/TC27D/Tricore/_PinMap}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/PeripheralWrapper}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/App}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/App/SharedMem}&quot;"/>
 								</option>
 								<option id="com.infineon.aurix.buildsystem.managed.tool.c.compiler.option.debugging.other.1881781592" name="Other debugging flags" superClass="com.infineon.aurix.buildsystem.managed.tool.c.compiler.option.debugging.other" useByScannerDiscovery="false" value="-gdwarf-3" valueType="string"/>
 								<inputType id="com.infineon.aurix.buildsystem.managed.tool.c.compiler.inputType.920523327" superClass="com.infineon.aurix.buildsystem.managed.tool.c.compiler.inputType"/>
@@ -319,4 +322,5 @@
 			<content-type-mapping configuration="" content-type="org.eclipse.cdt.core.cxxSource" language="com.tasking.dbg.ctc.cpplanguage"/>
 		</project-mappings>
 	</storageModule>
+	<storageModule moduleId="refreshScope"/>
 </cproject>
