@@ -35,44 +35,48 @@
 /* Public API Functions --------------------------------------------------- */
 
 void SharedMem_WriteImuData_C0_C1(ImuData_t imu_data) {
-    IfxCpu_acquireMutex(&g_SharedMem.mutex_0_1); // acquire lock for core 0 to core 1
+    IfxCpu_acquireMutex((IfxCpu_mutexLock *)&g_SharedMem.mutex_0_1); // acquire lock for core 0 to core 1
     g_SharedMem.data_0_1 = imu_data; // write data to shared memory (struct copy)
-    IfxCpu_releaseMutex(&g_SharedMem.mutex_0_1); // release lock
+    IfxCpu_releaseMutex((IfxCpu_mutexLock *)&g_SharedMem.mutex_0_1); // release lock
 }
 
 ImuData_t SharedMem_ReadImuData_C0_C1(void) {
     ImuData_t localCopy;
-    IfxCpu_acquireMutex(&g_SharedMem.mutex_0_1); // acquire lock for core 0 to core 1
+    IfxCpu_acquireMutex((IfxCpu_mutexLock *)&g_SharedMem.mutex_0_1); // acquire lock for core 0 to core 1
     localCopy = g_SharedMem.data_0_1; // struct copy to local variable for safety
-    IfxCpu_releaseMutex(&g_SharedMem.mutex_0_1); // release lock
+    // for (uint16 i = 0; i < 20000; i++)
+    // {
+    //     __nop();
+    // }
+    IfxCpu_releaseMutex((IfxCpu_mutexLock *)&g_SharedMem.mutex_0_1); // release lock
     return localCopy;
 }
 
 void SharedMem_WriteOrientation_C1_C2(OrientationData_t data) {
-    IfxCpu_acquireMutex(&g_SharedMem.mutex_1_2); // acquire lock for core 1 to core 2
+    IfxCpu_acquireMutex((IfxCpu_mutexLock *)&g_SharedMem.mutex_1_2); // acquire lock for core 1 to core 2
     g_SharedMem.data_1_2 = data; // write data to shared memory (struct copy)
-    IfxCpu_releaseMutex(&g_SharedMem.mutex_1_2); // release lock
+    IfxCpu_releaseMutex((IfxCpu_mutexLock *)&g_SharedMem.mutex_1_2); // release lock
 }
 
 OrientationData_t SharedMem_ReadOrientation_C1_C2(void) {
     OrientationData_t localCopy;
-    IfxCpu_acquireMutex(&g_SharedMem.mutex_1_2); // acquire lock for core 1 to core 2
+    IfxCpu_acquireMutex((IfxCpu_mutexLock *)&g_SharedMem.mutex_1_2); // acquire lock for core 1 to core 2
     localCopy = g_SharedMem.data_1_2; // struct copy to local variable for safety
-    IfxCpu_releaseMutex(&g_SharedMem.mutex_1_2); // release lock
+    IfxCpu_releaseMutex((IfxCpu_mutexLock *)&g_SharedMem.mutex_1_2); // release lock
     return localCopy;
 }
 
 void SharedMem_WriteImuData_C0_C2(ImuData_t data) {
-    IfxCpu_acquireMutex(&g_SharedMem.mutex_0_2); // acquire lock for core 0 to core 2
+    IfxCpu_acquireMutex((IfxCpu_mutexLock *)&g_SharedMem.mutex_0_2); // acquire lock for core 0 to core 2
     g_SharedMem.data_0_2 = data; // write data to shared memory (struct copy)
-    IfxCpu_releaseMutex(&g_SharedMem.mutex_0_2); // release lock
+    IfxCpu_releaseMutex((IfxCpu_mutexLock *)&g_SharedMem.mutex_0_2); // release lock
 }
 
 ImuData_t SharedMem_ReadImuData_C0_C2(void) {
     ImuData_t localCopy;
-    IfxCpu_acquireMutex(&g_SharedMem.mutex_0_2); // acquire lock for core 0 to core 2
+    IfxCpu_acquireMutex((IfxCpu_mutexLock *)&g_SharedMem.mutex_0_2); // acquire lock for core 0 to core 2
     localCopy = g_SharedMem.data_0_2; // struct copy to local variable for safety
-    IfxCpu_releaseMutex(&g_SharedMem.mutex_0_2); // release lock
+    IfxCpu_releaseMutex((IfxCpu_mutexLock *)&g_SharedMem.mutex_0_2); // release lock
     return localCopy;
 }
 
