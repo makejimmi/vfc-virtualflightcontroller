@@ -39,13 +39,14 @@
 /*********************************************************************************************************************/
 #define ISR_PRIORITY_GPT12_TIMER    6                       /* Define the GPT12 Timer interrupt priority            */
 #define ISR_PROVIDER_GPT12_TIMER    IfxSrc_Tos_cpu0         /* Interrupt provider                                   */
-#define RELOAD_VALUE                48828u                  /* Reload value to have an interrupt each 500ms         */
+#define RELOAD_VALUE                (48828u/5u)                  /* Reload value to have an interrupt each 100ms         */
 
 /*********************************************************************************************************************/
 /*-------------------------------------------------Global variables--------------------------------------------------*/
 /*********************************************************************************************************************/
 
-boolean gtm_flag;
+boolean control_gtm_flag;
+boolean report_gtm_flag;
 
 /*********************************************************************************************************************/
 /*--------------------------------------------Private Variables/Constants--------------------------------------------*/
@@ -89,5 +90,14 @@ void tc275_gtm_init(void) {
 /* Interrupt Service Routine of the GPT12 */
 void interruptGpt12(void)
 {
-    gtm_flag = TRUE;
+    static uint8_t cycles = 0;
+
+    cycles++;
+
+    report_gtm_flag = TRUE;
+
+    if ((cycles % 1) == 0) { // control period multiple of report period?
+        control_gtm_flag = TRUE;
+        cycles = 0;
+    }
 }
