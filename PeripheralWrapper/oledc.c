@@ -70,6 +70,7 @@ static void draw_area
 
 
 oledc_t oledc;
+uint8_t *M0_img, *M1_img, *M2_img, *M3_img;
 
 static void pixel( oledc_t *ctx, uint8_t col, uint8_t row, uint16_t color );
 

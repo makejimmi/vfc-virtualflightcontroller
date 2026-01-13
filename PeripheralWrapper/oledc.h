@@ -179,6 +179,7 @@ typedef struct {
 
 extern oledc_t oledc;
 extern uint8_t oledc_background[];
+extern uint8_t *M0_img, *M1_img, *M2_img, *M3_img;
 
 /** \} */ // End types group
 // ----------------------------------------------- PUBLIC FUNCTION DECLARATIONS
