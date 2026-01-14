@@ -41,6 +41,10 @@
 
 IfxCpu_syncEvent cpuSyncEvent = 0;
 
+
+ImuData_t imuDataProcessed;
+ImuData_t imuDataRead;
+
 /* --------------------(START)Remove in finished project-------------------- */
 #define UART_TX_BUFFER_SIZE (200U)
 /* --------------------(END) Remove in finished project-------------------- */
@@ -96,22 +100,25 @@ int core0_main(void)
     {
         if (IMU_I2C_ReadAll(&imuDataRaw) == TRUE)
         {
-            // imuDataProcessed.ax = IMU_Accel_g(imuDataRaw.ax);
-            // imuDataProcessed.ay = IMU_Accel_g(imuDataRaw.ay);
-            // imuDataProcessed.az = IMU_Accel_g(imuDataRaw.az);
-            // imuDataProcessed.gx = IMU_Gyro_dps(imuDataRaw.gx);
-            // imuDataProcessed.gy = IMU_Gyro_dps(imuDataRaw.gy);
-            // imuDataProcessed.gz = IMU_Gyro_dps(imuDataRaw.gz);
+            //IMU_Accel_ms2(...)
+            imuDataProcessed.accel_x = IMU_Accel_g(imuDataRaw.ax);
+            imuDataProcessed.accel_y = IMU_Accel_g(imuDataRaw.ay);
+            imuDataProcessed.accel_z = IMU_Accel_g(imuDataRaw.az);
+            imuDataProcessed.gyro_x = IMU_Gyro_dps(imuDataRaw.gx);
+            imuDataProcessed.gyro_y = IMU_Gyro_dps(imuDataRaw.gy);
+            imuDataProcessed.gyro_z = IMU_Gyro_dps(imuDataRaw.gz);
 
-            // SharedMem_WriteImuData_C0_C1(imuDataProcessed);
+            SharedMem_WriteImuData_C0_C1(imuDataProcessed);
 
-            // frequency of the measurement
-            // waitTime(IfxStm_getTicksFromMilliseconds(BSP_DEFAULT_TIMER, IMU_SEND_INTERVAL_MS));
+            imuDataRead = SharedMem_ReadImuData_C0_C1();
+
+            //frequency of the measurement
+            //waitTime(IfxStm_getTicksFromMilliseconds(BSP_DEFAULT_TIMER, IMU_SEND_INTERVAL_MS));
 
             int len = snprintf((char *)uartBuf, UART_TX_BUFFER_SIZE,
                                "A[g]=%.3f %.3f %.3f  G[dps]=%.2f %.2f %.2f  T[C]=%.2f\r\n",
-                               IMU_Accel_g(imuDataRaw.ax), IMU_Accel_g(imuDataRaw.ay), IMU_Accel_g(imuDataRaw.az),
-                               IMU_Gyro_dps(imuDataRaw.gx), IMU_Gyro_dps(imuDataRaw.gy), IMU_Gyro_dps(imuDataRaw.gz),
+                               imuDataRead.accel_x, imuDataRead.accel_y, imuDataRead.accel_z,
+                               imuDataRead.gyro_x, imuDataRead.gyro_y, imuDataRead.gyro_z,
                                IMU_Temp_C(imuDataRaw.temp));
 
             uart_sendMessage((uint8 *)uartBuf, (Ifx_SizeT)len);
@@ -122,7 +129,7 @@ int core0_main(void)
             uart_sendMessage((uint8 *)errMsg, (Ifx_SizeT)strlen((char *)errMsg));
         }
         // frequency of the measurement
-        waitTime(IfxStm_getTicksFromMilliseconds(BSP_DEFAULT_TIMER, IMU_SEND_INTERVAL_MS));
+        //waitTime(IfxStm_getTicksFromMilliseconds(BSP_DEFAULT_TIMER, IMU_SEND_INTERVAL_MS));
     }
 #else
 return 0;
