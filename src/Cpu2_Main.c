@@ -56,7 +56,7 @@ int core2_main (void)
         if (report_gtm_flag) // report to WebSerializer - 100ms period
         {
             memset(report_buf, 0, sizeof(report_buf));
-            sprintf((char *)report_buf, "ROLL=%1.3f PITCH=%1.3f YAW=%1.3f", roll, pitch, yaw);
+            sprintf((char *)report_buf, "ROLL=%1.3f PITCH=%1.3f YAW=%1.3f\r\n", roll, pitch, yaw);
             uart_sendMessage(&report_buf[0], strlen((char *)report_buf));
         }
 
@@ -72,6 +72,7 @@ int core2_main (void)
             pwm_M2 = thrust_control_out + roll + pitch - yaw;
             pwm_M3 = thrust_control_out - roll - pitch - yaw;
 
+            /*
             if (pwm_M0 > 0.75f) {
                 M0_img = M0_75_img;
             } else if (pwm_M0 > 0.5f) {
@@ -115,7 +116,7 @@ int core2_main (void)
                 M3_img = M3_00_img;
             }
             oledc_image(&oledc, M3_img, 96-10, 96-10);
-
+*/
 
             control_gtm_flag = FALSE;
         }
