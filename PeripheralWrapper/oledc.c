@@ -70,7 +70,7 @@ static void draw_area
 
 
 oledc_t oledc;
-uint8_t *M0_img, *M1_img, *M2_img, *M3_img;
+const uint8_t *M0_img, *M1_img, *M2_img, *M3_img;
 
 static void pixel( oledc_t *ctx, uint8_t col, uint8_t row, uint16_t color );
 
@@ -207,7 +207,13 @@ void oledc_rectangle
     box_area( ctx, col_off, row_off, col_end, row_end, color );
 }
 
-void oledc_image( oledc_t *ctx, const uint8_t* img, uint8_t col_off, uint8_t row_off )
+void oledc_image( oledc_t *ctx, const uint8_t* img, uint8_t col_off, uint8_t row_off, uint8_t width, uint8_t height)
+{
+    const uint8_t *ptr = img;
+    draw_area( ctx, col_off, row_off, col_off + width, row_off + height, ptr);
+}
+
+void oledc_background_image( oledc_t *ctx, const uint8_t* img)
 {
     const uint8_t *ptr = img;
     draw_area( ctx, 0, 0, 96, 96, ptr);

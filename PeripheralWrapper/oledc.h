@@ -179,7 +179,7 @@ typedef struct {
 
 extern oledc_t oledc;
 extern uint8_t oledc_background[];
-extern uint8_t *M0_img, *M1_img, *M2_img, *M3_img;
+extern const uint8_t *M0_img, *M1_img, *M2_img, *M3_img;
 
 /** \} */ // End types group
 // ----------------------------------------------- PUBLIC FUNCTION DECLARATIONS
@@ -349,7 +349,8 @@ void oledc_rectangle( oledc_t *ctx, uint8_t col_off, uint8_t row_off, uint8_t co
  * bmp format with 6 bytes header size. Providing image of any other format may
  * result in unpredictable behaviour.
  */
-void oledc_image( oledc_t *ctx, const uint8_t* img, uint8_t col_off, uint8_t row_off );
+void oledc_background_image( oledc_t *ctx, const uint8_t* img);
+void oledc_image( oledc_t *ctx, const uint8_t* img, uint8_t col_off, uint8_t row_off, uint8_t width, uint8_t height);
 
 /**
  * @brief Draw Text.

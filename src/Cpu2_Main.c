@@ -3,6 +3,7 @@
 #include "IfxScuWdt.h"
 
 #include "oledc.h"
+#include "oledc_M01_img.h"
 #include "tc275_spi_wrap.h"
 #include "tc275_gtm_wrap.h"
 #include "tc275_uart_app.h"
@@ -26,7 +27,8 @@ int core2_main (void)
 {
     roll = pitch = yaw = 0.0f;
     thrust = thrust_setpoint = thrust_control_out = 0.0f;
-    pwm_M0 = pwm_M1 = pwm_M2 = pwm_M3 = 0.0f;
+    pwm_M0 = 50.0f;
+    pwm_M1 = pwm_M2 = pwm_M3 = 0.0f;
 
     IfxCpu_enableInterrupts();
     /*
@@ -45,7 +47,7 @@ int core2_main (void)
     tc275_spi_init();
     oledc_init(&oledc);
 
-    oledc_image(&oledc, oledc_background, 0, 0);
+    oledc_background_image(&oledc, oledc_background);
 
     // gtm for screen refresh
     tc275_gtm_init();
@@ -67,56 +69,52 @@ int core2_main (void)
 
             // Calculate the four duty cycles from angles
             // CAUTION: M0 is top right, M1 bottom left, M2 top left, M3 in the remaining space
-            pwm_M0 = thrust_control_out - roll + pitch + yaw;
-            pwm_M1 = thrust_control_out + roll - pitch + yaw;
+            //pwm_M0 = thrust_control_out - roll + pitch + yaw;
+            //pwm_M1 = thrust_control_out + roll - pitch + yaw;
             pwm_M2 = thrust_control_out + roll + pitch - yaw;
             pwm_M3 = thrust_control_out - roll - pitch - yaw;
 
-            /*
-            if (pwm_M0 > 0.75f) {
-                M0_img = M0_75_img;
-            } else if (pwm_M0 > 0.5f) {
-                M0_img = M0_50_img;
-            } else if (pwm_M0 > 0.25f) {
-                M0_img = M0_25_img;
-            } else {
-                M0_img = M0_00_img;
-            }
-            oledc_image(&oledc, M0_img, 96-10, 10);
+            pwm_M0 += 4.0f;
+            pwm_M1 += 4.0f;
 
-            if (pwm_M0 > 0.75f) {
-                M1_img = M1_75_img;
-            } else if (pwm_M0 > 0.5f) {
-                M1_img = M1_50_img;
-            } else if (pwm_M0 > 0.25f) {
-                M1_img = M1_25_img;
-            } else {
-                M1_img = M1_00_img;
-            }
-            oledc_image(&oledc, M1_img, 10, 96-10);
+            if (pwm_M0 > 100.0f)
+                pwm_M0 = 0.0f;
+            if (pwm_M1 > 100.0f)
+                pwm_M1 = 0.0f;
 
-            if (pwm_M0 > 0.75f) {
-                M2_img = M2_75_img;
-            } else if (pwm_M0 > 0.5f) {
-                M2_img = M2_50_img;
-            } else if (pwm_M0 > 0.25f) {
-                M2_img = M2_25_img;
+            if (pwm_M0 > 90.0f) {
+                M0_img = M01_90_img;
+            } else if (pwm_M0 > 75.0f) {
+                M0_img = M01_75_img;
+            } else if (pwm_M0 > 60.0f) {
+                M0_img = M01_60_img;
+            } else if (pwm_M0 > 50.0f) {
+                M0_img = M01_50_img;
+            } else if (pwm_M0 > 25.0f) {
+                M0_img = M01_25_img;
+            } else if (pwm_M0 > 10.0f) {
+                M0_img = M01_10_img;
             } else {
-                M2_img = M2_00_img;
+                M0_img = M01_00_img;
             }
-            oledc_image(&oledc, M2_img, 10, 10);
+            oledc_image(&oledc, M0_img, 10, 10, 18, 18);
 
-            if (pwm_M0 > 0.75f) {
-                M3_img = M3_75_img;
-            } else if (pwm_M0 > 0.5f) {
-                M3_img = M3_50_img;
-            } else if (pwm_M0 > 0.25f) {
-                M3_img = M3_25_img;
+            if (pwm_M1 > 90.0f) {
+                M1_img = M01_90_img;
+            } else if (pwm_M1 > 75.0f) {
+                M1_img = M01_75_img;
+            } else if (pwm_M1 > 60.0f) {
+                M1_img = M01_60_img;
+            } else if (pwm_M1 > 50.0f) {
+                M1_img = M01_50_img;
+            } else if (pwm_M1 > 25.0f) {
+                M1_img = M01_25_img;
+            } else if (pwm_M1 > 10.0f) {
+                M1_img = M01_10_img;
             } else {
-                M3_img = M3_00_img;
+                M1_img = M01_00_img;
             }
-            oledc_image(&oledc, M3_img, 96-10, 96-10);
-*/
+            oledc_image(&oledc, M1_img, 96-36+10, 96-36+10, 18, 18);
 
             control_gtm_flag = FALSE;
         }
