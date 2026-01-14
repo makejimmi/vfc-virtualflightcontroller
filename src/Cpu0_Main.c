@@ -33,7 +33,7 @@
 #include <stdio.h>
 
 #include <tc275_uart_app.h>
-#include "IMU_I2C_app.h"
+#include "src/App/RawDataImu/IMU_I2C_app.h"
 #include "src/App/SharedMem/InterCoreData.h"
 
 #include "IfxStm.h"
