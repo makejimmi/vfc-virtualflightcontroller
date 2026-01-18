@@ -98,6 +98,8 @@ int core1_main (void)
         /* roll = x, pitch = y, yaw = z */
         /* complemtary filter only gives roll and pitch */
         angles = angle_calc(imu_data);
+
+        /* write angles to CPU2 */
         SharedMem_WriteOrientation_C1_C2(angles);
 
         /* --------------------(START)Remove in finished project-------------------- */

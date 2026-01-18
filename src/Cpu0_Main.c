@@ -58,15 +58,14 @@ void core0_main(void)
 int core0_main(void)
 #endif
 
-    /* --------------------(START)Remove in finished project-------------------- */
-
+    /* -------------------(START)Remove in finished project-------------------- */
     uint8 uartBuf[UART_TX_BUFFER_SIZE];
     int len = 0;
 
     /* Hello message */
     const uint8 startMsg[] = "Core0: UART OK, init IMU...\r\n";
-
     /* --------------------(END) Remove in finished project-------------------- */
+
     IfxCpu_enableInterrupts();
     /*
      * !!WATCHDOG0 AND SAFETY WATCHDOG ARE DISABLED HERE!!
@@ -94,8 +93,6 @@ int core0_main(void)
     ImuDataRaw_t imuDataRaw;
     memset(&imuDataRaw, 0, sizeof(imuDataRaw));
 
-    // ImuData_t imuDataProcessed; //data beni
-
 #if !defined(IFX_CFG_RETURN_FROM_MAIN)
     while (1)
     {
@@ -111,6 +108,7 @@ int core0_main(void)
 
             SharedMem_WriteImuData_C0_C1(imuDataProcessed);
 
+            /* --------------------(START)Remove in finished project-------------------- */
             len = snprintf((char *)uartBuf, UART_TX_BUFFER_SIZE,
                                "CPU0: A[g]=%.3f %.3f %.3f  G[dps]=%.2f %.2f %.2f  T[C]=%.2f\r\n",
                                imuDataProcessed.accel_x, imuDataProcessed.accel_y, imuDataProcessed.accel_z,
@@ -118,6 +116,7 @@ int core0_main(void)
                                IMU_Temp_C(imuDataRaw.temp));
 
             uart_sendMessage((uint8 *)uartBuf, (Ifx_SizeT)len);
+            /* --------------------(END) Remove in finished project-------------------- */
         }
         else
         {
