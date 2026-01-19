@@ -7,6 +7,7 @@
 #include "tc275_spi_wrap.h"
 #include "tc275_gtm_wrap.h"
 #include "tc275_uart_app.h"
+#include "SharedMem/InterCoreData.h"
 #include "aurix_pin_mappings.h"
 #include "controller.h"
 #include <string.h>
@@ -15,7 +16,7 @@
 extern IfxCpu_syncEvent cpuSyncEvent;
 
 float roll, pitch, yaw;
-float thrust, thrust_setpoint, thrust_control_out;
+float thrust, thrust_setpoint, thrust_torque;
 float pwm_M0, pwm_M1, pwm_M2, pwm_M3;
 uint8_t report_buf[36];
 
@@ -25,8 +26,10 @@ void core2_main (void)
 int core2_main (void)
 #endif
 {
-    roll = pitch = yaw = 0.0f;
-    thrust = thrust_setpoint = thrust_control_out = 0.0f;
+    OrientationData_t orientation;
+
+    float roll_torque, pitch_torque, yaw_torque;
+    thrust = thrust_setpoint = thrust_torque = 0.0f;
     pwm_M0 = 50.0f;
     pwm_M1 = pwm_M2 = pwm_M3 = 0.0f;
 
@@ -43,6 +46,7 @@ int core2_main (void)
 
     // enable SPI peripheral for OledC-Click
     gpio_init_pins();
+    initUART();
     qspi1_m_init_pins();
     tc275_spi_init();
     oledc_init(&oledc);
@@ -57,37 +61,44 @@ int core2_main (void)
     {
         if (report_gtm_flag) // report to WebSerializer - 100ms period
         {
-
+            orientation = SharedMem_ReadOrientation_C1_C2();
             memset(report_buf, 0, sizeof(report_buf));
-            sprintf((char *)report_buf, "ROLL=%1.3f PITCH=%1.3f YAW=%1.3f\r\n", roll, pitch, yaw);
+            sprintf((char *)report_buf, "ROLL=%1.3f PITCH=%1.3f YAW=%1.3f\r\n", orientation.roll, orientation.pitch, orientation.yaw);
             uart_sendMessage(&report_buf[0], strlen((char *)report_buf));
         }
 
         if (control_gtm_flag) // control thrust for pwm - 100ms period
         {
             // Calculate needed thrust to level the 'copter
-            thrust_control_out = controller(thrust_setpoint - thrust);
+            thrust_torque = controller(thrust_setpoint - thrust);
+            roll_torque = controller(0.0f - orientation.roll);
+            pitch_torque = controller(0.0f - orientation.pitch);
+            yaw_torque = controller(0.0f - orientation.yaw);
 
             // Calculate the four duty cycles from angles
             // CAUTION: M0 is top right, M1 bottom left, M2 top left, M3 in the remaining space
-            //pwm_M0 = thrust_control_out - roll + pitch + yaw;
-            //pwm_M1 = thrust_control_out + roll - pitch + yaw;
-            //pwm_M2 = thrust_control_out + roll + pitch - yaw;
-            //pwm_M3 = thrust_control_out - roll - pitch - yaw;
-
-            pwm_M0 += 4.0f;
-            pwm_M1 -= 4.0f;
-            pwm_M2 += 4.0f;
-            pwm_M3 -= 4.0f;
+            pwm_M0 = thrust_torque - roll_torque + pitch_torque + yaw_torque;
+            pwm_M1 = thrust_torque + roll_torque - pitch_torque + yaw_torque;
+            pwm_M2 = thrust_torque + roll_torque + pitch_torque - yaw_torque;
+            pwm_M3 = thrust_torque - roll_torque - pitch_torque - yaw_torque;
 
             if (pwm_M0 > 100.0f)
+                pwm_M0 = 100.0f;
+            else if (pwm_M0 < 0.0f)
                 pwm_M0 = 0.0f;
-            if (pwm_M2 > 100.0f)
-                pwm_M2 = 0.0f;
-            if (pwm_M1 < 0.0f)
+            if (pwm_M1 > 100.0f)
                 pwm_M1 = 100.0f;
-            if (pwm_M3 < 0.0f)
+            else if (pwm_M1 < 0.0f)
+                pwm_M1 = 0.0f;
+            if (pwm_M2 > 100.0f)
+                pwm_M2 = 100.0f;
+            else if (pwm_M2 < 0.0f)
+                pwm_M2 = 0.0f;
+            if (pwm_M3 > 100.0f)
                 pwm_M3 = 100.0f;
+            else if (pwm_M3 < 0.0f)
+                pwm_M3 = 0.0f;
+
 
 
             if (pwm_M0 > 90.0f) {

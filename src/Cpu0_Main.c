@@ -122,8 +122,8 @@ int core0_main(void)
         }
         else
         {
-            const uint8 errMsg[] = "IMU read failed (I2C NACK/ERROR)\r\n";
-            //uart_sendMessage((uint8 *)errMsg, (Ifx_SizeT)strlen((char *)errMsg));
+//            const uint8 errMsg[] = "IMU read failed (I2C NACK/ERROR)\r\n";
+//            uart_sendMessage((uint8 *)errMsg, (Ifx_SizeT)strlen((char *)errMsg));
         }
         // frequency of the measurement
         waitTime(IfxStm_getTicksFromMilliseconds(BSP_DEFAULT_TIMER, IMU_SEND_INTERVAL_MS));
