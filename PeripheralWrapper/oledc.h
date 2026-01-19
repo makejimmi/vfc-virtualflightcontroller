@@ -48,6 +48,7 @@
  * \defgroup error_code Error Code
  * \{
  */
+
 #define OLEDC_RETVAL  uint8_t
 
 #define OLEDC_OK           0x00
@@ -179,7 +180,6 @@ typedef struct {
 
 extern oledc_t oledc;
 extern uint8_t oledc_background[];
-extern const uint8_t *M0_img, *M1_img, *M2_img, *M3_img;
 
 /** \} */ // End types group
 // ----------------------------------------------- PUBLIC FUNCTION DECLARATIONS
@@ -191,6 +191,8 @@ extern const uint8_t *M0_img, *M1_img, *M2_img, *M3_img;
 #ifdef __cplusplus
 extern "C"{
 #endif
+
+
 
 /**
  * @brief Config Object Initialization function.

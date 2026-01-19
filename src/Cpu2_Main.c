@@ -3,7 +3,6 @@
 #include "IfxScuWdt.h"
 
 #include "oledc.h"
-#include "oledc_M01_img.h"
 #include "tc275_spi_wrap.h"
 #include "tc275_gtm_wrap.h"
 #include "tc275_uart_app.h"
@@ -15,10 +14,6 @@
 
 extern IfxCpu_syncEvent cpuSyncEvent;
 
-float roll, pitch, yaw;
-float thrust, thrust_setpoint, thrust_torque;
-float pwm_M0, pwm_M1, pwm_M2, pwm_M3;
-uint8_t report_buf[36];
 
 #if !defined(IFX_CFG_RETURN_FROM_MAIN)
 void core2_main (void)
@@ -28,6 +23,9 @@ int core2_main (void)
 {
     OrientationData_t orientation;
 
+    float thrust, thrust_setpoint, thrust_torque;
+    float pwm_M0, pwm_M1, pwm_M2, pwm_M3;
+    uint8_t report_buf[36];
     float roll_torque, pitch_torque, yaw_torque;
     thrust = thrust_setpoint = thrust_torque = 0.0f;
     pwm_M0 = 50.0f;
@@ -62,6 +60,7 @@ int core2_main (void)
         if (report_gtm_flag) // report to WebSerializer - 100ms period
         {
             orientation = SharedMem_ReadOrientation_C1_C2();
+            orientation.roll = -orientation.roll;
             memset(report_buf, 0, sizeof(report_buf));
             sprintf((char *)report_buf, "ROLL=%1.3f PITCH=%1.3f YAW=%1.3f\r\n", orientation.roll, orientation.pitch, orientation.yaw);
             uart_sendMessage(&report_buf[0], strlen((char *)report_buf));
@@ -98,8 +97,6 @@ int core2_main (void)
                 pwm_M3 = 100.0f;
             else if (pwm_M3 < 0.0f)
                 pwm_M3 = 0.0f;
-
-
 
             if (pwm_M0 > 90.0f) {
                 oledc_line(&oledc, 24, 17, 24, 18, 0xFFFF);
@@ -337,12 +334,6 @@ int core2_main (void)
             } else {
                 oledc_line(&oledc, 95-10-60, 19+60, 95-10-60, 16+60, 0x0000);
             }
-
-
-
-
-
-
 
             control_gtm_flag = FALSE;
         }

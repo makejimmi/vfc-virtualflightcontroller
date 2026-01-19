@@ -122,18 +122,19 @@ void tc275_spi_init(void) {
 }
 
 void spi_write ( uint8_t *data_buf, uint8_t len ) {
-    uint8_t tx_buf[ 265 ];
+    uint8_t tx_buf[ 100*100*2 ];
     uint8_t cnt;
-
+/*
     for ( cnt = 0; cnt < len; cnt++ )
     {
         tx_buf[ cnt ] = data_buf[ cnt ];
     }
-
+*/
     while( IfxQspi_SpiMaster_getStatus(&spiChannel) == IfxQspi_Status_busy )
         { ; }
 
-    IfxQspi_SpiMaster_exchange(&spiChannel, &tx_buf[0], NULL, len);
+//    IfxQspi_SpiMaster_exchange(&spiChannel, &tx_buf[0], NULL, len);
+    IfxQspi_SpiMaster_exchange(&spiChannel, &data_buf[0], NULL, len);
 
     while( IfxQspi_SpiMaster_getStatus(&spiChannel) == IfxQspi_Status_busy )
         { ; }
