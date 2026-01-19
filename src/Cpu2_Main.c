@@ -16,7 +16,7 @@
 extern IfxCpu_syncEvent cpuSyncEvent;
 
 float roll, pitch, yaw;
-float thrust, thrust_setpoint, thrust_control_out;
+float thrust, thrust_setpoint, thrust_torque;
 float pwm_M0, pwm_M1, pwm_M2, pwm_M3;
 uint8_t report_buf[36];
 
@@ -28,7 +28,8 @@ int core2_main (void)
 {
     OrientationData_t orientation;
 
-    thrust = thrust_setpoint = thrust_control_out = 0.0f;
+    float roll_torque, pitch_torque, yaw_torque;
+    thrust = thrust_setpoint = thrust_torque = 0.0f;
     pwm_M0 = 50.0f;
     pwm_M1 = pwm_M2 = pwm_M3 = 0.0f;
 
@@ -69,28 +70,35 @@ int core2_main (void)
         if (control_gtm_flag) // control thrust for pwm - 100ms period
         {
             // Calculate needed thrust to level the 'copter
-            thrust_control_out = controller(thrust_setpoint - thrust);
+            thrust_torque = controller(thrust_setpoint - thrust);
+            roll_torque = controller(0.0f - orientation.roll);
+            pitch_torque = controller(0.0f - orientation.pitch);
+            yaw_torque = controller(0.0f - orientation.yaw);
 
             // Calculate the four duty cycles from angles
             // CAUTION: M0 is top right, M1 bottom left, M2 top left, M3 in the remaining space
-            pwm_M0 = thrust_control_out - roll + pitch + yaw;
-            pwm_M1 = thrust_control_out + roll - pitch + yaw;
-            pwm_M2 = thrust_control_out + roll + pitch - yaw;
-            pwm_M3 = thrust_control_out - roll - pitch - yaw;
-
-            pwm_M0 += 4.0f;
-            pwm_M1 -= 4.0f;
-            pwm_M2 += 4.0f;
-            pwm_M3 -= 4.0f;
+            pwm_M0 = thrust_torque - roll_torque + pitch_torque + yaw_torque;
+            pwm_M1 = thrust_torque + roll_torque - pitch_torque + yaw_torque;
+            pwm_M2 = thrust_torque + roll_torque + pitch_torque - yaw_torque;
+            pwm_M3 = thrust_torque - roll_torque - pitch_torque - yaw_torque;
 
             if (pwm_M0 > 100.0f)
+                pwm_M0 = 100.0f;
+            else if (pwm_M0 < 0.0f)
                 pwm_M0 = 0.0f;
-            if (pwm_M2 > 100.0f)
-                pwm_M2 = 0.0f;
-            if (pwm_M1 < 0.0f)
+            if (pwm_M1 > 100.0f)
                 pwm_M1 = 100.0f;
-            if (pwm_M3 < 0.0f)
+            else if (pwm_M1 < 0.0f)
+                pwm_M1 = 0.0f;
+            if (pwm_M2 > 100.0f)
+                pwm_M2 = 100.0f;
+            else if (pwm_M2 < 0.0f)
+                pwm_M2 = 0.0f;
+            if (pwm_M3 > 100.0f)
                 pwm_M3 = 100.0f;
+            else if (pwm_M3 < 0.0f)
+                pwm_M3 = 0.0f;
+
 
 
             if (pwm_M0 > 90.0f) {
