@@ -57,6 +57,7 @@ int core2_main (void)
     {
         if (report_gtm_flag) // report to WebSerializer - 100ms period
         {
+
             memset(report_buf, 0, sizeof(report_buf));
             sprintf((char *)report_buf, "ROLL=%1.3f PITCH=%1.3f YAW=%1.3f\r\n", roll, pitch, yaw);
             uart_sendMessage(&report_buf[0], strlen((char *)report_buf));
@@ -71,50 +72,266 @@ int core2_main (void)
             // CAUTION: M0 is top right, M1 bottom left, M2 top left, M3 in the remaining space
             //pwm_M0 = thrust_control_out - roll + pitch + yaw;
             //pwm_M1 = thrust_control_out + roll - pitch + yaw;
-            pwm_M2 = thrust_control_out + roll + pitch - yaw;
-            pwm_M3 = thrust_control_out - roll - pitch - yaw;
+            //pwm_M2 = thrust_control_out + roll + pitch - yaw;
+            //pwm_M3 = thrust_control_out - roll - pitch - yaw;
 
             pwm_M0 += 4.0f;
-            pwm_M1 += 4.0f;
+            pwm_M1 -= 4.0f;
+            pwm_M2 += 4.0f;
+            pwm_M3 -= 4.0f;
 
             if (pwm_M0 > 100.0f)
                 pwm_M0 = 0.0f;
-            if (pwm_M1 > 100.0f)
-                pwm_M1 = 0.0f;
+            if (pwm_M2 > 100.0f)
+                pwm_M2 = 0.0f;
+            if (pwm_M1 < 0.0f)
+                pwm_M1 = 100.0f;
+            if (pwm_M3 < 0.0f)
+                pwm_M3 = 100.0f;
+
 
             if (pwm_M0 > 90.0f) {
-                M0_img = M01_90_img;
-            } else if (pwm_M0 > 75.0f) {
-                M0_img = M01_75_img;
-            } else if (pwm_M0 > 60.0f) {
-                M0_img = M01_60_img;
-            } else if (pwm_M0 > 50.0f) {
-                M0_img = M01_50_img;
-            } else if (pwm_M0 > 25.0f) {
-                M0_img = M01_25_img;
-            } else if (pwm_M0 > 10.0f) {
-                M0_img = M01_10_img;
+                oledc_line(&oledc, 24, 17, 24, 18, 0xFFFF);
+                oledc_line(&oledc, 23, 16, 23, 19, 0xFFFF);
             } else {
-                M0_img = M01_00_img;
+                oledc_line(&oledc, 24, 17, 24, 18, 0x0000);
+                oledc_line(&oledc, 23, 16, 23, 19, 0x0000);
             }
-            oledc_image(&oledc, M0_img, 10, 10, 18, 18);
+            if (pwm_M0 > 80.0f) {
+                oledc_line(&oledc, 22, 15, 22, 20, 0xFFFF);
+                oledc_line(&oledc, 21, 14, 21, 21, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 22, 15, 22, 20, 0x0000);
+                oledc_line(&oledc, 21, 14, 21, 21, 0x0000);
+            }
+            if (pwm_M0 > 70.0f) {
+                oledc_line(&oledc, 20, 13, 20, 22, 0xFFFF);
+                oledc_line(&oledc, 19, 12, 19, 23, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 20, 13, 20, 22, 0x0000);
+                oledc_line(&oledc, 19, 12, 19, 23, 0x0000);
+            }
+            if (pwm_M0 > 60.0f) {
+                oledc_line(&oledc, 18, 11, 18, 24, 0xFFFF);
+                oledc_line(&oledc, 17, 19, 17, 16, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 18, 11, 18, 24, 0x0000);
+                oledc_line(&oledc, 17, 19, 17, 16, 0x0000);
+            }
+            if (pwm_M0 > 50.0f) {
+                oledc_line(&oledc, 16, 19, 16, 16, 0xFFFF);
+                oledc_line(&oledc, 15, 19, 15, 16, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 16, 19, 16, 16, 0x0000);
+                oledc_line(&oledc, 15, 19, 15, 16, 0x0000);
+            }
+            if (pwm_M0 > 40.0f) {
+                oledc_line(&oledc, 14, 19, 14, 16, 0xFFFF);
+                oledc_line(&oledc, 13, 19, 13, 16, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 14, 19, 14, 16, 0x0000);
+                oledc_line(&oledc, 13, 19, 13, 16, 0x0000);
+            }
+            if (pwm_M0 > 30.0f) {
+                oledc_line(&oledc, 12, 19, 12, 16, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 12, 19, 12, 16, 0x0000);
+            }
+            if (pwm_M0 > 20.0f) {
+                oledc_line(&oledc, 11, 19, 11, 16, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 11, 19, 11, 16, 0x0000);
+            }
+            if (pwm_M0 > 10.0f) {
+                oledc_line(&oledc, 10, 19, 10, 16, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 10, 19, 10, 16, 0x0000);
+            }
+
 
             if (pwm_M1 > 90.0f) {
-                M1_img = M01_90_img;
-            } else if (pwm_M1 > 75.0f) {
-                M1_img = M01_75_img;
-            } else if (pwm_M1 > 60.0f) {
-                M1_img = M01_60_img;
-            } else if (pwm_M1 > 50.0f) {
-                M1_img = M01_50_img;
-            } else if (pwm_M1 > 25.0f) {
-                M1_img = M01_25_img;
-            } else if (pwm_M1 > 10.0f) {
-                M1_img = M01_10_img;
+                oledc_line(&oledc, 24+60, 17+60, 24+60, 18+60, 0xFFFF);
+                oledc_line(&oledc, 23+60, 16+60, 23+60, 19+60, 0xFFFF);
             } else {
-                M1_img = M01_00_img;
+                oledc_line(&oledc, 24+60, 17+60, 24+60, 18+60, 0x0000);
+                oledc_line(&oledc, 23+60, 16+60, 23+60, 19+60, 0x0000);
             }
-            oledc_image(&oledc, M1_img, 96-36+10, 96-36+10, 18, 18);
+            if (pwm_M1 > 80.0f) {
+                oledc_line(&oledc, 22+60, 15+60, 22+60, 20+60, 0xFFFF);
+                oledc_line(&oledc, 21+60, 14+60, 21+60, 21+60, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 22+60, 15+60, 22+60, 20+60, 0x0000);
+                oledc_line(&oledc, 21+60, 14+60, 21+60, 21+60, 0x0000);
+            }
+            if (pwm_M1 > 70.0f) {
+                oledc_line(&oledc, 20+60, 13+60, 20+60, 22+60, 0xFFFF);
+                oledc_line(&oledc, 19+60, 12+60, 19+60, 23+60, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 20+60, 13+60, 20+60, 22+60, 0x0000);
+                oledc_line(&oledc, 19+60, 12+60, 19+60, 23+60, 0x0000);
+            }
+            if (pwm_M1 > 60.0f) {
+                oledc_line(&oledc, 18+60, 11+60, 18+60, 24+60, 0xFFFF);
+                oledc_line(&oledc, 17+60, 19+60, 17+60, 16+60, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 18+60, 11+60, 18+60, 24+60, 0x0000);
+                oledc_line(&oledc, 17+60, 19+60, 17+60, 16+60, 0x0000);
+            }
+            if (pwm_M1 > 50.0f) {
+                oledc_line(&oledc, 16+60, 19+60, 16+60, 16+60, 0xFFFF);
+                oledc_line(&oledc, 15+60, 19+60, 15+60, 16+60, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 16+60, 19+60, 16+60, 16+60, 0x0000);
+                oledc_line(&oledc, 15+60, 19+60, 15+60, 16+60, 0x0000);
+            }
+            if (pwm_M1 > 40.0f) {
+                oledc_line(&oledc, 14+60, 19+60, 14+60, 16+60, 0xFFFF);
+                oledc_line(&oledc, 13+60, 19+60, 13+60, 16+60, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 14+60, 19+60, 14+60, 16+60, 0x0000);
+                oledc_line(&oledc, 13+60, 19+60, 13+60, 16+60, 0x0000);
+            }
+            if (pwm_M1 > 30.0f) {
+                oledc_line(&oledc, 12+60, 19+60, 12+60, 16+60, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 12+60, 19+60, 12+60, 16+60, 0x0000);
+            }
+            if (pwm_M1 > 20.0f) {
+                oledc_line(&oledc, 11+60, 19+60, 11+60, 16+60, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 11+60, 19+60, 11+60, 16+60, 0x0000);
+            }
+            if (pwm_M1 > 10.0f) {
+                oledc_line(&oledc, 10+60, 19+60, 10+60, 16+60, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 10+60, 19+60, 10+60, 16+60, 0x0000);
+            }
+
+
+
+            if (pwm_M2 > 90.0f) {
+                oledc_line(&oledc, 95-24, 17, 95-24, 18, 0xFFFF);
+                oledc_line(&oledc, 95-23, 16, 95-23, 19, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 95-24, 17, 95-24, 18, 0x0000);
+                oledc_line(&oledc, 95-23, 16, 95-23, 19, 0x0000);
+            }
+            if (pwm_M2 > 80.0f) {
+                oledc_line(&oledc, 95-22, 15, 95-22, 20, 0xFFFF);
+                oledc_line(&oledc, 95-21, 14, 95-21, 21, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 95-22, 15, 95-22, 20, 0x0000);
+                oledc_line(&oledc, 95-21, 14, 95-21, 21, 0x0000);
+            }
+            if (pwm_M2 > 70.0f) {
+                oledc_line(&oledc, 95-20, 13, 95-20, 22, 0xFFFF);
+                oledc_line(&oledc, 95-19, 12, 95-19, 23, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 95-20, 13, 95-20, 22, 0x0000);
+                oledc_line(&oledc, 95-19, 12, 95-19, 23, 0x0000);
+            }
+            if (pwm_M2 > 60.0f) {
+                oledc_line(&oledc, 95-18, 11, 95-18, 24, 0xFFFF);
+                oledc_line(&oledc, 95-17, 19, 95-17, 16, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 95-18, 11, 95-18, 24, 0x0000);
+                oledc_line(&oledc, 95-17, 19, 95-17, 16, 0x0000);
+            }
+            if (pwm_M2 > 50.0f) {
+                oledc_line(&oledc, 95-16, 19, 95-16, 16, 0xFFFF);
+                oledc_line(&oledc, 95-15, 19, 95-15, 16, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 95-16, 19, 95-16, 16, 0x0000);
+                oledc_line(&oledc, 95-15, 19, 95-15, 16, 0x0000);
+            }
+            if (pwm_M2 > 40.0f) {
+                oledc_line(&oledc, 95-14, 19, 95-14, 16, 0xFFFF);
+                oledc_line(&oledc, 95-13, 19, 95-13, 16, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 95-14, 19, 95-14, 16, 0x0000);
+                oledc_line(&oledc, 95-13, 19, 95-13, 16, 0x0000);
+            }
+            if (pwm_M2 > 30.0f) {
+                oledc_line(&oledc, 95-12, 19, 95-12, 16, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 95-12, 19, 95-12, 16, 0x0000);
+            }
+            if (pwm_M2 > 20.0f) {
+                oledc_line(&oledc, 95-11, 19, 95-11, 16, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 95-11, 19, 95-11, 16, 0x0000);
+            }
+            if (pwm_M2 > 10.0f) {
+                oledc_line(&oledc, 95-10, 19, 95-10, 16, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 95-10, 19, 95-10, 16, 0x0000);
+            }
+
+
+
+            if (pwm_M3 > 90.0f) {
+                oledc_line(&oledc, 95-24-60, 17+60, 95-24-60, 18+60, 0xFFFF);
+                oledc_line(&oledc, 95-23-60, 16+60, 95-23-60, 19+60, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 95-24-60, 17+60, 95-24-60, 18+60, 0x0000);
+                oledc_line(&oledc, 95-23-60, 16+60, 95-23-60, 19+60, 0x0000);
+            }
+            if (pwm_M3 > 80.0f) {
+                oledc_line(&oledc, 95-22-60, 15+60, 95-22-60, 20+60, 0xFFFF);
+                oledc_line(&oledc, 95-21-60, 14+60, 95-21-60, 21+60, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 95-22-60, 15+60, 95-22-60, 20+60, 0x0000);
+                oledc_line(&oledc, 95-21-60, 14+60, 95-21-60, 21+60, 0x0000);
+            }
+            if (pwm_M3 > 70.0f) {
+                oledc_line(&oledc, 95-20-60, 13+60, 95-20-60, 22+60, 0xFFFF);
+                oledc_line(&oledc, 95-19-60, 12+60, 95-19-60, 23+60, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 95-20-60, 13+60, 95-20-60, 22+60, 0x0000);
+                oledc_line(&oledc, 95-19-60, 12+60, 95-19-60, 23+60, 0x0000);
+            }
+            if (pwm_M3 > 60.0f) {
+                oledc_line(&oledc, 95-18-60, 11+60, 95-18-60, 24+60, 0xFFFF);
+                oledc_line(&oledc, 95-17-60, 19+60, 95-17-60, 16+60, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 95-18-60, 11+60, 95-18-60, 24+60, 0x0000);
+                oledc_line(&oledc, 95-17-60, 19+60, 95-17-60, 16+60, 0x0000);
+            }
+            if (pwm_M3 > 50.0f) {
+                oledc_line(&oledc, 95-16-60, 19+60, 95-16-60, 16+60, 0xFFFF);
+                oledc_line(&oledc, 95-15-60, 19+60, 95-15-60, 16+60, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 95-16-60, 19+60, 95-16-60, 16+60, 0x0000);
+                oledc_line(&oledc, 95-15-60, 19+60, 95-15-60, 16+60, 0x0000);
+            }
+            if (pwm_M3 > 40.0f) {
+                oledc_line(&oledc, 95-14-60, 19+60, 95-14-60, 16+60, 0xFFFF);
+                oledc_line(&oledc, 95-13-60, 19+60, 95-13-60, 16+60, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 95-14-60, 19+60, 95-14-60, 16+60, 0x0000);
+                oledc_line(&oledc, 95-13-60, 19+60, 95-13-60, 16+60, 0x0000);
+            }
+            if (pwm_M3 > 30.0f) {
+                oledc_line(&oledc, 95-12-60, 19+60, 95-12-60, 16+60, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 95-12-60, 19+60, 95-12-60, 16+60, 0x0000);
+            }
+            if (pwm_M3 > 20.0f) {
+                oledc_line(&oledc, 95-11-60, 19+60, 95-11-60, 16+60, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 95-11-60, 19+60, 95-11-60, 16+60, 0x0000);
+            }
+            if (pwm_M3 > 10.0f) {
+                oledc_line(&oledc, 95-10-60, 19+60, 95-10-60, 16+60, 0xFFFF);
+            } else {
+                oledc_line(&oledc, 95-10-60, 19+60, 95-10-60, 16+60, 0x0000);
+            }
+
+
+
+
+
+
 
             control_gtm_flag = FALSE;
         }

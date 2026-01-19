@@ -40,7 +40,7 @@
 /*********************************************************************************************************************/
 #define ISR_PRIORITY_GPT12_TIMER    6                       /* Define the GPT12 Timer interrupt priority            */
 #define ISR_PROVIDER_GPT12_TIMER    IfxSrc_Tos_cpu0         /* Interrupt provider                                   */
-#define RELOAD_VALUE                (48828u/5u)                  /* Reload value to have an interrupt each 100ms         */
+#define RELOAD_VALUE                (48828u/15u)                  /* Reload value to have an interrupt each 500 / 15ms         */
 
 /*********************************************************************************************************************/
 /*-------------------------------------------------Global variables--------------------------------------------------*/
