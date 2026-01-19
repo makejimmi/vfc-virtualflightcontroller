@@ -78,9 +78,9 @@ void angle_calc_wait_sample_time(void) {
 OrientationData_t angle_calc_complementary_filter(ImuData_t imu_data) {
     OrientationData_t temp;
 
-    temp.roll  = atan2(imu_data.accel_y, imu_data.accel_z);
-    temp.roll = temp.roll * (180.0/PI);
-    temp.pitch = atan2( (-1.0)*imu_data.accel_x, sqrt( pow(imu_data.accel_y, 2) + pow(imu_data.accel_z, 2) ) );
+    temp.roll  = atan2( (-1.0)*imu_data.accel_x, sqrt( pow(imu_data.accel_y, 2) + pow(imu_data.accel_z, 2) ) );
+    temp.roll  = temp.roll * (180.0/PI);
+    temp.pitch = atan2(imu_data.accel_y, imu_data.accel_z);
     temp.pitch = temp.pitch * (180.0/PI);
     temp.yaw   = 0.0;
 

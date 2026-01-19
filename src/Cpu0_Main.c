@@ -46,7 +46,7 @@ ImuData_t imuDataProcessed;
 ImuData_t imuDataRead;
 
 /* --------------------(START)Remove in finished project-------------------- */
-#define UART_TX_BUFFER_SIZE (200U)
+//#define UART_TX_BUFFER_SIZE (200U)
 /* --------------------(END) Remove in finished project-------------------- */
 
 #define IMU_SEND_INTERVAL_MS (50)
@@ -59,11 +59,11 @@ int core0_main(void)
 #endif
 
     /* -------------------(START)Remove in finished project-------------------- */
-//    uint8 uartBuf[UART_TX_BUFFER_SIZE];
-    int len = 0;
+    //uint8 uartBuf[UART_TX_BUFFER_SIZE];
+    //int len = 0;
 
     /* Hello message */
-//    const uint8 startMsg[] = "Core0: UART OK, init IMU...\r\n";
+    //const uint8 startMsg[] = "Core0: UART OK, init IMU...\r\n";
     /* --------------------(END) Remove in finished project-------------------- */
 
     IfxCpu_enableInterrupts();
@@ -79,15 +79,15 @@ int core0_main(void)
     IfxCpu_waitEvent(&cpuSyncEvent, 1);
 
     /* --------------------(START)Remove in finished project-------------------- */
-//    initUART(); /* Initialize the UART module      */
-//    uart_sendMessage((uint8 *)startMsg, (Ifx_SizeT)strlen((char *)startMsg));
+    //initUART(); /* Initialize the UART module      */
+    //uart_sendMessage((uint8 *)startMsg, (Ifx_SizeT)strlen((char *)startMsg));
     /* --------------------(END) Remove in finished project-------------------- */
 
     IMU_I2C_Init();
 
     /* --------------------(START)Remove in finished project-------------------- */
-//    const uint8 imuOkMsg[] = "Core0: IMU_I2C_Init done. Streaming raw data...\r\n";
-//    uart_sendMessage((uint8 *)imuOkMsg, (Ifx_SizeT)strlen((char *)imuOkMsg));
+    //const uint8 imuOkMsg[] = "Core0: IMU_I2C_Init done. Streaming raw data...\r\n";
+    //uart_sendMessage((uint8 *)imuOkMsg, (Ifx_SizeT)strlen((char *)imuOkMsg));
     /* --------------------(END) Remove in finished project-------------------- */
 
     ImuDataRaw_t imuDataRaw;
@@ -115,8 +115,9 @@ int core0_main(void)
                                imuDataProcessed.accel_x, imuDataProcessed.accel_y, imuDataProcessed.accel_z,
                                imuDataProcessed.gyro_x, imuDataProcessed.gyro_y, imuDataProcessed.gyro_z,
                                IMU_Temp_C(imuDataRaw.temp));
+
+            uart_sendMessage((uint8 *)uartBuf, (Ifx_SizeT)len);
             */
-//            uart_sendMessage((uint8 *)uartBuf, (Ifx_SizeT)len);
             /* --------------------(END) Remove in finished project-------------------- */
         }
         else
