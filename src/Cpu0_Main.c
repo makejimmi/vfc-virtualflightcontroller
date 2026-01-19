@@ -49,7 +49,7 @@ ImuData_t imuDataRead;
 #define UART_TX_BUFFER_SIZE (200U)
 /* --------------------(END) Remove in finished project-------------------- */
 
-#define IMU_SEND_INTERVAL_MS (1000U) /* 10 Hz */
+#define IMU_SEND_INTERVAL_MS (50)
 
 #if !defined(IFX_CFG_RETURN_FROM_MAIN)
 void core0_main(void)
@@ -58,15 +58,14 @@ void core0_main(void)
 int core0_main(void)
 #endif
 
-    /* --------------------(START)Remove in finished project-------------------- */
-
+    /* -------------------(START)Remove in finished project-------------------- */
     uint8 uartBuf[UART_TX_BUFFER_SIZE];
     int len = 0;
 
     /* Hello message */
     const uint8 startMsg[] = "Core0: UART OK, init IMU...\r\n";
-
     /* --------------------(END) Remove in finished project-------------------- */
+
     IfxCpu_enableInterrupts();
     /*
      * !!WATCHDOG0 AND SAFETY WATCHDOG ARE DISABLED HERE!!
@@ -80,9 +79,10 @@ int core0_main(void)
     IfxCpu_waitEvent(&cpuSyncEvent, 1);
 
     /* --------------------(START)Remove in finished project-------------------- */
-    initUART(); /* Initialize the UART module      */
+    //initUART(); /* Initialize the UART module      */
     uart_sendMessage((uint8 *)startMsg, (Ifx_SizeT)strlen((char *)startMsg));
     /* --------------------(END) Remove in finished project-------------------- */
+
     IMU_I2C_Init();
 
     /* --------------------(START)Remove in finished project-------------------- */
@@ -93,35 +93,30 @@ int core0_main(void)
     ImuDataRaw_t imuDataRaw;
     memset(&imuDataRaw, 0, sizeof(imuDataRaw));
 
-    // ImuData_t imuDataProcessed; //data benni
-
 #if !defined(IFX_CFG_RETURN_FROM_MAIN)
     while (1)
     {
         if (IMU_I2C_ReadAll(&imuDataRaw) == TRUE)
         {
             //IMU_Accel_ms2(...)
-            imuDataProcessed.accel_x = IMU_Accel_g(imuDataRaw.ax);
-            imuDataProcessed.accel_y = IMU_Accel_g(imuDataRaw.ay);
-            imuDataProcessed.accel_z = IMU_Accel_g(imuDataRaw.az);
+            imuDataProcessed.accel_x = IMU_Accel_ms2(imuDataRaw.ax);
+            imuDataProcessed.accel_y = IMU_Accel_ms2(imuDataRaw.ay);
+            imuDataProcessed.accel_z = IMU_Accel_ms2(imuDataRaw.az);
             imuDataProcessed.gyro_x = IMU_Gyro_dps(imuDataRaw.gx);
             imuDataProcessed.gyro_y = IMU_Gyro_dps(imuDataRaw.gy);
             imuDataProcessed.gyro_z = IMU_Gyro_dps(imuDataRaw.gz);
 
             SharedMem_WriteImuData_C0_C1(imuDataProcessed);
 
-            imuDataRead = SharedMem_ReadImuData_C0_C1();
-
-            //frequency of the measurement
-            //waitTime(IfxStm_getTicksFromMilliseconds(BSP_DEFAULT_TIMER, IMU_SEND_INTERVAL_MS));
-
-            int len = snprintf((char *)uartBuf, UART_TX_BUFFER_SIZE,
-                               "A[g]=%.3f %.3f %.3f  G[dps]=%.2f %.2f %.2f  T[C]=%.2f\r\n",
-                               imuDataRead.accel_x, imuDataRead.accel_y, imuDataRead.accel_z,
-                               imuDataRead.gyro_x, imuDataRead.gyro_y, imuDataRead.gyro_z,
+            /* --------------------(START)Remove in finished project-------------------- */
+            len = snprintf((char *)uartBuf, UART_TX_BUFFER_SIZE,
+                               "CPU0: A[g]=%.3f %.3f %.3f  G[dps]=%.2f %.2f %.2f  T[C]=%.2f\r\n",
+                               imuDataProcessed.accel_x, imuDataProcessed.accel_y, imuDataProcessed.accel_z,
+                               imuDataProcessed.gyro_x, imuDataProcessed.gyro_y, imuDataProcessed.gyro_z,
                                IMU_Temp_C(imuDataRaw.temp));
 
             uart_sendMessage((uint8 *)uartBuf, (Ifx_SizeT)len);
+            /* --------------------(END) Remove in finished project-------------------- */
         }
         else
         {
@@ -129,7 +124,7 @@ int core0_main(void)
             uart_sendMessage((uint8 *)errMsg, (Ifx_SizeT)strlen((char *)errMsg));
         }
         // frequency of the measurement
-        //waitTime(IfxStm_getTicksFromMilliseconds(BSP_DEFAULT_TIMER, IMU_SEND_INTERVAL_MS));
+        waitTime(IfxStm_getTicksFromMilliseconds(BSP_DEFAULT_TIMER, IMU_SEND_INTERVAL_MS));
     }
 #else
 return 0;
