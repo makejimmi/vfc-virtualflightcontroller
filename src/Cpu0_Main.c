@@ -59,11 +59,11 @@ int core0_main(void)
 #endif
 
     /* -------------------(START)Remove in finished project-------------------- */
-    uint8 uartBuf[UART_TX_BUFFER_SIZE];
+//    uint8 uartBuf[UART_TX_BUFFER_SIZE];
     int len = 0;
 
     /* Hello message */
-    const uint8 startMsg[] = "Core0: UART OK, init IMU...\r\n";
+//    const uint8 startMsg[] = "Core0: UART OK, init IMU...\r\n";
     /* --------------------(END) Remove in finished project-------------------- */
 
     IfxCpu_enableInterrupts();
@@ -79,15 +79,15 @@ int core0_main(void)
     IfxCpu_waitEvent(&cpuSyncEvent, 1);
 
     /* --------------------(START)Remove in finished project-------------------- */
-    //initUART(); /* Initialize the UART module      */
-    uart_sendMessage((uint8 *)startMsg, (Ifx_SizeT)strlen((char *)startMsg));
+//    initUART(); /* Initialize the UART module      */
+//    uart_sendMessage((uint8 *)startMsg, (Ifx_SizeT)strlen((char *)startMsg));
     /* --------------------(END) Remove in finished project-------------------- */
 
     IMU_I2C_Init();
 
     /* --------------------(START)Remove in finished project-------------------- */
-    const uint8 imuOkMsg[] = "Core0: IMU_I2C_Init done. Streaming raw data...\r\n";
-    uart_sendMessage((uint8 *)imuOkMsg, (Ifx_SizeT)strlen((char *)imuOkMsg));
+//    const uint8 imuOkMsg[] = "Core0: IMU_I2C_Init done. Streaming raw data...\r\n";
+//    uart_sendMessage((uint8 *)imuOkMsg, (Ifx_SizeT)strlen((char *)imuOkMsg));
     /* --------------------(END) Remove in finished project-------------------- */
 
     ImuDataRaw_t imuDataRaw;
@@ -109,19 +109,20 @@ int core0_main(void)
             SharedMem_WriteImuData_C0_C1(imuDataProcessed);
 
             /* --------------------(START)Remove in finished project-------------------- */
+            /*
             len = snprintf((char *)uartBuf, UART_TX_BUFFER_SIZE,
                                "CPU0: A[g]=%.3f %.3f %.3f  G[dps]=%.2f %.2f %.2f  T[C]=%.2f\r\n",
                                imuDataProcessed.accel_x, imuDataProcessed.accel_y, imuDataProcessed.accel_z,
                                imuDataProcessed.gyro_x, imuDataProcessed.gyro_y, imuDataProcessed.gyro_z,
                                IMU_Temp_C(imuDataRaw.temp));
-
-            uart_sendMessage((uint8 *)uartBuf, (Ifx_SizeT)len);
+            */
+//            uart_sendMessage((uint8 *)uartBuf, (Ifx_SizeT)len);
             /* --------------------(END) Remove in finished project-------------------- */
         }
         else
         {
-            const uint8 errMsg[] = "IMU read failed (I2C NACK/ERROR)\r\n";
-            uart_sendMessage((uint8 *)errMsg, (Ifx_SizeT)strlen((char *)errMsg));
+//            const uint8 errMsg[] = "IMU read failed (I2C NACK/ERROR)\r\n";
+//            uart_sendMessage((uint8 *)errMsg, (Ifx_SizeT)strlen((char *)errMsg));
         }
         // frequency of the measurement
         waitTime(IfxStm_getTicksFromMilliseconds(BSP_DEFAULT_TIMER, IMU_SEND_INTERVAL_MS));

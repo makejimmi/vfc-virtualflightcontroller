@@ -33,11 +33,11 @@ int core1_main (void)
     angles.yaw   = 0;
 
     /* --------------------(START)Remove in finished project-------------------- */
-    initUART(); /* Initialize the UART module      */
-    const uint8 testMsg[] = "Core1: TestMessage\r\n";
+//    initUART(); /* Initialize the UART module      */
+//    const uint8 testMsg[] = "Core1: TestMessage\r\n";
 
-    uart_sendMessage((uint8 *)testMsg, (Ifx_SizeT)strlen((char *)testMsg));
-    uint8 uartBuf_ang[UART_TX_BUFFER_SIZE];
+//    uart_sendMessage((uint8 *)testMsg, (Ifx_SizeT)strlen((char *)testMsg));
+//    uint8 uartBuf_ang[UART_TX_BUFFER_SIZE];
     int len = 0;
     /* --------------------(END) Remove in finished project-------------------- */
 
@@ -103,10 +103,12 @@ int core1_main (void)
         SharedMem_WriteOrientation_C1_C2(angles);
 
         /* --------------------(START)Remove in finished project-------------------- */
+        /*
         len = snprintf((char *)uartBuf_ang, UART_TX_BUFFER_SIZE,
                                        "CPU1 Angles: Roll: %.3f  Pitch %.3f  Yaw %.3f\r\n",
                                        angles.roll, angles.pitch, angles.yaw);
-        uart_sendMessage((uint8 *)uartBuf_ang, (Ifx_SizeT)len);
+*/
+    //    uart_sendMessage((uint8 *)uartBuf_ang, (Ifx_SizeT)len);
         /* --------------------(END) Remove in finished project-------------------- */
         angle_calc_wait_sample_time();
     }

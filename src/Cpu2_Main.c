@@ -7,6 +7,7 @@
 #include "tc275_spi_wrap.h"
 #include "tc275_gtm_wrap.h"
 #include "tc275_uart_app.h"
+#include "SharedMem/InterCoreData.h"
 #include "aurix_pin_mappings.h"
 #include "controller.h"
 #include <string.h>
@@ -25,7 +26,8 @@ void core2_main (void)
 int core2_main (void)
 #endif
 {
-    roll = pitch = yaw = 0.0f;
+    OrientationData_t orientation;
+
     thrust = thrust_setpoint = thrust_control_out = 0.0f;
     pwm_M0 = 50.0f;
     pwm_M1 = pwm_M2 = pwm_M3 = 0.0f;
@@ -43,6 +45,7 @@ int core2_main (void)
 
     // enable SPI peripheral for OledC-Click
     gpio_init_pins();
+    initUART();
     qspi1_m_init_pins();
     tc275_spi_init();
     oledc_init(&oledc);
@@ -57,9 +60,9 @@ int core2_main (void)
     {
         if (report_gtm_flag) // report to WebSerializer - 100ms period
         {
-
+            orientation = SharedMem_ReadOrientation_C1_C2();
             memset(report_buf, 0, sizeof(report_buf));
-            sprintf((char *)report_buf, "ROLL=%1.3f PITCH=%1.3f YAW=%1.3f\r\n", roll, pitch, yaw);
+            sprintf((char *)report_buf, "ROLL=%1.3f PITCH=%1.3f YAW=%1.3f\r\n", orientation.roll, orientation.pitch, orientation.yaw);
             uart_sendMessage(&report_buf[0], strlen((char *)report_buf));
         }
 
@@ -70,10 +73,10 @@ int core2_main (void)
 
             // Calculate the four duty cycles from angles
             // CAUTION: M0 is top right, M1 bottom left, M2 top left, M3 in the remaining space
-            //pwm_M0 = thrust_control_out - roll + pitch + yaw;
-            //pwm_M1 = thrust_control_out + roll - pitch + yaw;
-            //pwm_M2 = thrust_control_out + roll + pitch - yaw;
-            //pwm_M3 = thrust_control_out - roll - pitch - yaw;
+            pwm_M0 = thrust_control_out - roll + pitch + yaw;
+            pwm_M1 = thrust_control_out + roll - pitch + yaw;
+            pwm_M2 = thrust_control_out + roll + pitch - yaw;
+            pwm_M3 = thrust_control_out - roll - pitch - yaw;
 
             pwm_M0 += 4.0f;
             pwm_M1 -= 4.0f;
