@@ -19,7 +19,7 @@
  * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE 
- * OR OTHER DEALINGS IN THE SOFTWARE. 
+* OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 /*!
@@ -44,6 +44,7 @@ static uint8_t OLEDC_DEFAULT_REMAP = OLEDC_RMP_INC_HOR | OLEDC_RMP_COLOR_REV |
 
 static  uint8_t OLEDC_DEFAULT_VSL[ 3 ]       = { 0xA0, 0xB5, 0x55 };
 static  uint8_t OLEDC_DEFAULT_CONTRAST[ 3 ]  = { 0x8A, 0x51, 0x8A };
+
 
 // ---------------------------------------------- PRIVATE FUNCTION DECLARATIONS 
 
@@ -216,6 +217,7 @@ void oledc_image( oledc_t *ctx, const uint8_t* img, uint8_t col_off, uint8_t row
 void oledc_background_image( oledc_t *ctx, const uint8_t* img)
 {
     const uint8_t *ptr = img;
+
     draw_area( ctx, 0, 0, 96, 96, ptr);
 }
 
