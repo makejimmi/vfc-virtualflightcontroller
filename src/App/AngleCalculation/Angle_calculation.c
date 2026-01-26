@@ -42,6 +42,8 @@
 /*-------------------------------------------------Global variables--------------------------------------------------*/
 /*********************************************************************************************************************/
 
+float angle_calc_yaw = 0;
+
 /*********************************************************************************************************************/
 /*--------------------------------------------Private Variables/Constants--------------------------------------------*/
 /*********************************************************************************************************************/
@@ -97,7 +99,10 @@ OrientationData_t angle_calc_complementary_filter(ImuData_t imu_data) {
  * output: yaw angle
  */
 float angle_calc_get_yaw(ImuData_t imu_data) {
-    return 0.0;
+    if(imu_data.gyro_z > ANGLE_CALC_YAW_THRESHOLD || imu_data.gyro_z < (-1.0)*(ANGLE_CALC_YAW_THRESHOLD)) {
+        angle_calc_yaw = angle_calc_yaw + imu_data.gyro_z*((float)ANGLE_CALC_SAMPLE_TIME_MS/1000.0);
+    }
+    return angle_calc_yaw;
 }
 
 
