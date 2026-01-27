@@ -683,6 +683,12 @@ SECTIONS
 		*(.lmubss.*)
 	} > lmuram
 	
+    .lmu_global : 
+    {
+        *(.lmu_global)
+        *(.lmu_global.*)
+    } > lmuram_nc
+	
 	.inttab_tc0_000 (LCF_INTVEC0_START + 0x0) : { . = ALIGN(8) ;  KEEP (*(.intvec_tc0_0)); } > pfls0
 	.inttab_tc0_001 (LCF_INTVEC0_START + 0x20) : { . = ALIGN(8) ;  KEEP (*(.intvec_tc0_1)); } > pfls0
 	.inttab_tc0_002 (LCF_INTVEC0_START + 0x40) : { . = ALIGN(8) ;  KEEP (*(.intvec_tc0_2)); } > pfls0
