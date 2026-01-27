@@ -379,6 +379,15 @@ void oledc_text( oledc_t *ctx, uint8_t *text, uint16_t x, uint16_t y );
  */
 void oledc_set_font( oledc_t *ctx, const uint8_t *font_s, uint16_t color );
 
+
+/**
+ * @brief Draw the arrows according to the supplied pwm duty cycle in percent.
+ *
+ * @param ctx  Context object.
+ */
+
+void oledc_update_pwm_graphics(oledc_t *ctx, float *pwm_M0, float *pwm_M1, float *pwm_M2, float *pwm_M3);
+
 #ifdef __cplusplus
 }
 #endif

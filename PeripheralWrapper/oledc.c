@@ -430,4 +430,266 @@ static void character( oledc_t *ctx, uint16_t ch )
     ctx->x_cord = x + 1;
 }
 
+/**
+ * @brief Draw the arrows according to the supplied pwm duty cycle in percent.
+ *
+ * @param ctx  Context object.
+ */
+
+void oledc_update_pwm_graphics(oledc_t *ctx, float *pwm_M0, float *pwm_M1, float *pwm_M2, float *pwm_M3) {
+    if (*pwm_M0 > 100.0f)
+        *pwm_M0 = 100.0f;
+    else if (*pwm_M0 < 0.0f)
+        *pwm_M0 = 0.0f;
+    if (*pwm_M1 > 100.0f)
+        *pwm_M1 = 100.0f;
+    else if (*pwm_M1 < 0.0f)
+        *pwm_M1 = 0.0f;
+    if (*pwm_M2 > 100.0f)
+        *pwm_M2 = 100.0f;
+    else if (*pwm_M2 < 0.0f)
+        *pwm_M2 = 0.0f;
+    if (*pwm_M3 > 100.0f)
+        *pwm_M3 = 100.0f;
+    else if (*pwm_M3 < 0.0f)
+        *pwm_M3 = 0.0f;
+
+    if (*pwm_M0 > 90.0f) {
+        oledc_line(ctx, 24, 17, 24, 18, 0xFFFF);
+        oledc_line(ctx, 23, 16, 23, 19, 0xFFFF);
+    } else {
+        oledc_line(ctx, 24, 17, 24, 18, 0x0000);
+        oledc_line(ctx, 23, 16, 23, 19, 0x0000);
+    }
+    if (*pwm_M0 > 80.0f) {
+        oledc_line(ctx, 22, 15, 22, 20, 0xFFFF);
+        oledc_line(ctx, 21, 14, 21, 21, 0xFFFF);
+    } else {
+        oledc_line(ctx, 22, 15, 22, 20, 0x0000);
+        oledc_line(ctx, 21, 14, 21, 21, 0x0000);
+    }
+    if (*pwm_M0 > 70.0f) {
+        oledc_line(ctx, 20, 13, 20, 22, 0xFFFF);
+        oledc_line(ctx, 19, 12, 19, 23, 0xFFFF);
+    } else {
+        oledc_line(ctx, 20, 13, 20, 22, 0x0000);
+        oledc_line(ctx, 19, 12, 19, 23, 0x0000);
+    }
+    if (*pwm_M0 > 60.0f) {
+        oledc_line(ctx, 18, 11, 18, 24, 0xFFFF);
+        oledc_line(ctx, 17, 19, 17, 16, 0xFFFF);
+    } else {
+        oledc_line(ctx, 18, 11, 18, 24, 0x0000);
+        oledc_line(ctx, 17, 19, 17, 16, 0x0000);
+    }
+    if (*pwm_M0 > 50.0f) {
+        oledc_line(ctx, 16, 19, 16, 16, 0xFFFF);
+        oledc_line(ctx, 15, 19, 15, 16, 0xFFFF);
+    } else {
+        oledc_line(ctx, 16, 19, 16, 16, 0x0000);
+        oledc_line(ctx, 15, 19, 15, 16, 0x0000);
+    }
+    if (*pwm_M0 > 40.0f) {
+        oledc_line(ctx, 14, 19, 14, 16, 0xFFFF);
+        oledc_line(ctx, 13, 19, 13, 16, 0xFFFF);
+    } else {
+        oledc_line(ctx, 14, 19, 14, 16, 0x0000);
+        oledc_line(ctx, 13, 19, 13, 16, 0x0000);
+    }
+    if (*pwm_M0 > 30.0f) {
+        oledc_line(ctx, 12, 19, 12, 16, 0xFFFF);
+    } else {
+        oledc_line(ctx, 12, 19, 12, 16, 0x0000);
+    }
+    if (*pwm_M0 > 20.0f) {
+        oledc_line(ctx, 11, 19, 11, 16, 0xFFFF);
+    } else {
+        oledc_line(ctx, 11, 19, 11, 16, 0x0000);
+    }
+    if (*pwm_M0 > 10.0f) {
+        oledc_line(ctx, 10, 19, 10, 16, 0xFFFF);
+    } else {
+        oledc_line(ctx, 10, 19, 10, 16, 0x0000);
+    }
+
+
+    if (*pwm_M1 > 90.0f) {
+        oledc_line(ctx, 24+60, 17+60, 24+60, 18+60, 0xFFFF);
+        oledc_line(ctx, 23+60, 16+60, 23+60, 19+60, 0xFFFF);
+    } else {
+        oledc_line(ctx, 24+60, 17+60, 24+60, 18+60, 0x0000);
+        oledc_line(ctx, 23+60, 16+60, 23+60, 19+60, 0x0000);
+    }
+    if (*pwm_M1 > 80.0f) {
+        oledc_line(ctx, 22+60, 15+60, 22+60, 20+60, 0xFFFF);
+        oledc_line(ctx, 21+60, 14+60, 21+60, 21+60, 0xFFFF);
+    } else {
+        oledc_line(ctx, 22+60, 15+60, 22+60, 20+60, 0x0000);
+        oledc_line(ctx, 21+60, 14+60, 21+60, 21+60, 0x0000);
+    }
+    if (*pwm_M1 > 70.0f) {
+        oledc_line(ctx, 20+60, 13+60, 20+60, 22+60, 0xFFFF);
+        oledc_line(ctx, 19+60, 12+60, 19+60, 23+60, 0xFFFF);
+    } else {
+        oledc_line(ctx, 20+60, 13+60, 20+60, 22+60, 0x0000);
+        oledc_line(ctx, 19+60, 12+60, 19+60, 23+60, 0x0000);
+    }
+    if (*pwm_M1 > 60.0f) {
+        oledc_line(ctx, 18+60, 11+60, 18+60, 24+60, 0xFFFF);
+        oledc_line(ctx, 17+60, 19+60, 17+60, 16+60, 0xFFFF);
+    } else {
+        oledc_line(ctx, 18+60, 11+60, 18+60, 24+60, 0x0000);
+        oledc_line(ctx, 17+60, 19+60, 17+60, 16+60, 0x0000);
+    }
+    if (*pwm_M1 > 50.0f) {
+        oledc_line(ctx, 16+60, 19+60, 16+60, 16+60, 0xFFFF);
+        oledc_line(ctx, 15+60, 19+60, 15+60, 16+60, 0xFFFF);
+    } else {
+        oledc_line(ctx, 16+60, 19+60, 16+60, 16+60, 0x0000);
+        oledc_line(ctx, 15+60, 19+60, 15+60, 16+60, 0x0000);
+    }
+    if (*pwm_M1 > 40.0f) {
+        oledc_line(ctx, 14+60, 19+60, 14+60, 16+60, 0xFFFF);
+        oledc_line(ctx, 13+60, 19+60, 13+60, 16+60, 0xFFFF);
+    } else {
+        oledc_line(ctx, 14+60, 19+60, 14+60, 16+60, 0x0000);
+        oledc_line(ctx, 13+60, 19+60, 13+60, 16+60, 0x0000);
+    }
+    if (*pwm_M1 > 30.0f) {
+        oledc_line(ctx, 12+60, 19+60, 12+60, 16+60, 0xFFFF);
+    } else {
+        oledc_line(ctx, 12+60, 19+60, 12+60, 16+60, 0x0000);
+    }
+    if (*pwm_M1 > 20.0f) {
+        oledc_line(ctx, 11+60, 19+60, 11+60, 16+60, 0xFFFF);
+    } else {
+        oledc_line(ctx, 11+60, 19+60, 11+60, 16+60, 0x0000);
+    }
+    if (*pwm_M1 > 10.0f) {
+        oledc_line(ctx, 10+60, 19+60, 10+60, 16+60, 0xFFFF);
+    } else {
+        oledc_line(ctx, 10+60, 19+60, 10+60, 16+60, 0x0000);
+    }
+
+
+
+    if (*pwm_M2 > 90.0f) {
+        oledc_line(ctx, 95-24, 17, 95-24, 18, 0xFFFF);
+        oledc_line(ctx, 95-23, 16, 95-23, 19, 0xFFFF);
+    } else {
+        oledc_line(ctx, 95-24, 17, 95-24, 18, 0x0000);
+        oledc_line(ctx, 95-23, 16, 95-23, 19, 0x0000);
+    }
+    if (*pwm_M2 > 80.0f) {
+        oledc_line(ctx, 95-22, 15, 95-22, 20, 0xFFFF);
+        oledc_line(ctx, 95-21, 14, 95-21, 21, 0xFFFF);
+    } else {
+        oledc_line(ctx, 95-22, 15, 95-22, 20, 0x0000);
+        oledc_line(ctx, 95-21, 14, 95-21, 21, 0x0000);
+    }
+    if (*pwm_M2 > 70.0f) {
+        oledc_line(ctx, 95-20, 13, 95-20, 22, 0xFFFF);
+        oledc_line(ctx, 95-19, 12, 95-19, 23, 0xFFFF);
+    } else {
+        oledc_line(ctx, 95-20, 13, 95-20, 22, 0x0000);
+        oledc_line(ctx, 95-19, 12, 95-19, 23, 0x0000);
+    }
+    if (*pwm_M2 > 60.0f) {
+        oledc_line(ctx, 95-18, 11, 95-18, 24, 0xFFFF);
+        oledc_line(ctx, 95-17, 19, 95-17, 16, 0xFFFF);
+    } else {
+        oledc_line(ctx, 95-18, 11, 95-18, 24, 0x0000);
+        oledc_line(ctx, 95-17, 19, 95-17, 16, 0x0000);
+    }
+    if (*pwm_M2 > 50.0f) {
+        oledc_line(ctx, 95-16, 19, 95-16, 16, 0xFFFF);
+        oledc_line(ctx, 95-15, 19, 95-15, 16, 0xFFFF);
+    } else {
+        oledc_line(ctx, 95-16, 19, 95-16, 16, 0x0000);
+        oledc_line(ctx, 95-15, 19, 95-15, 16, 0x0000);
+    }
+    if (*pwm_M2 > 40.0f) {
+        oledc_line(ctx, 95-14, 19, 95-14, 16, 0xFFFF);
+        oledc_line(ctx, 95-13, 19, 95-13, 16, 0xFFFF);
+    } else {
+        oledc_line(ctx, 95-14, 19, 95-14, 16, 0x0000);
+        oledc_line(ctx, 95-13, 19, 95-13, 16, 0x0000);
+    }
+    if (*pwm_M2 > 30.0f) {
+        oledc_line(ctx, 95-12, 19, 95-12, 16, 0xFFFF);
+    } else {
+        oledc_line(ctx, 95-12, 19, 95-12, 16, 0x0000);
+    }
+    if (*pwm_M2 > 20.0f) {
+        oledc_line(ctx, 95-11, 19, 95-11, 16, 0xFFFF);
+    } else {
+        oledc_line(ctx, 95-11, 19, 95-11, 16, 0x0000);
+    }
+    if (*pwm_M2 > 10.0f) {
+        oledc_line(ctx, 95-10, 19, 95-10, 16, 0xFFFF);
+    } else {
+        oledc_line(ctx, 95-10, 19, 95-10, 16, 0x0000);
+    }
+
+
+    if (*pwm_M3 > 90.0f) {
+        oledc_line(ctx, 95-24-60, 17+60, 95-24-60, 18+60, 0xFFFF);
+        oledc_line(ctx, 95-23-60, 16+60, 95-23-60, 19+60, 0xFFFF);
+    } else {
+        oledc_line(ctx, 95-24-60, 17+60, 95-24-60, 18+60, 0x0000);
+        oledc_line(ctx, 95-23-60, 16+60, 95-23-60, 19+60, 0x0000);
+    }
+    if (*pwm_M3 > 80.0f) {
+        oledc_line(ctx, 95-22-60, 15+60, 95-22-60, 20+60, 0xFFFF);
+        oledc_line(ctx, 95-21-60, 14+60, 95-21-60, 21+60, 0xFFFF);
+    } else {
+        oledc_line(ctx, 95-22-60, 15+60, 95-22-60, 20+60, 0x0000);
+        oledc_line(ctx, 95-21-60, 14+60, 95-21-60, 21+60, 0x0000);
+    }
+    if (*pwm_M3 > 70.0f) {
+        oledc_line(ctx, 95-20-60, 13+60, 95-20-60, 22+60, 0xFFFF);
+        oledc_line(ctx, 95-19-60, 12+60, 95-19-60, 23+60, 0xFFFF);
+    } else {
+        oledc_line(ctx, 95-20-60, 13+60, 95-20-60, 22+60, 0x0000);
+        oledc_line(ctx, 95-19-60, 12+60, 95-19-60, 23+60, 0x0000);
+    }
+    if (*pwm_M3 > 60.0f) {
+        oledc_line(ctx, 95-18-60, 11+60, 95-18-60, 24+60, 0xFFFF);
+        oledc_line(ctx, 95-17-60, 19+60, 95-17-60, 16+60, 0xFFFF);
+    } else {
+        oledc_line(ctx, 95-18-60, 11+60, 95-18-60, 24+60, 0x0000);
+        oledc_line(ctx, 95-17-60, 19+60, 95-17-60, 16+60, 0x0000);
+    }
+    if (*pwm_M3 > 50.0f) {
+        oledc_line(ctx, 95-16-60, 19+60, 95-16-60, 16+60, 0xFFFF);
+        oledc_line(ctx, 95-15-60, 19+60, 95-15-60, 16+60, 0xFFFF);
+    } else {
+        oledc_line(ctx, 95-16-60, 19+60, 95-16-60, 16+60, 0x0000);
+        oledc_line(ctx, 95-15-60, 19+60, 95-15-60, 16+60, 0x0000);
+    }
+    if (*pwm_M3 > 40.0f) {
+        oledc_line(ctx, 95-14-60, 19+60, 95-14-60, 16+60, 0xFFFF);
+        oledc_line(ctx, 95-13-60, 19+60, 95-13-60, 16+60, 0xFFFF);
+    } else {
+        oledc_line(ctx, 95-14-60, 19+60, 95-14-60, 16+60, 0x0000);
+        oledc_line(ctx, 95-13-60, 19+60, 95-13-60, 16+60, 0x0000);
+    }
+    if (*pwm_M3 > 30.0f) {
+        oledc_line(ctx, 95-12-60, 19+60, 95-12-60, 16+60, 0xFFFF);
+    } else {
+        oledc_line(ctx, 95-12-60, 19+60, 95-12-60, 16+60, 0x0000);
+    }
+    if (*pwm_M3 > 20.0f) {
+        oledc_line(ctx, 95-11-60, 19+60, 95-11-60, 16+60, 0xFFFF);
+    } else {
+        oledc_line(ctx, 95-11-60, 19+60, 95-11-60, 16+60, 0x0000);
+    }
+    if (*pwm_M3 > 10.0f) {
+        oledc_line(ctx, 95-10-60, 19+60, 95-10-60, 16+60, 0xFFFF);
+    } else {
+        oledc_line(ctx, 95-10-60, 19+60, 95-10-60, 16+60, 0x0000);
+    }
+
+}
+
 // ------------------------------------------------------------------------- END
